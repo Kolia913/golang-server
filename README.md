@@ -9,6 +9,6 @@
     1. cd "PROJEC_DIRECTORY"
     2. go run ./cmd/main.go
     
-### Build executble file:
+### Build executable file:
     1. cd "PROJECT_DIRECTORY"
     2. go build
