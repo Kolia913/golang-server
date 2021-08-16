@@ -3,6 +3,11 @@ package handler
 import (
 	"github.com/Kolia913/todo-app/pkg/service"
 	"github.com/gin-gonic/gin"
+
+	"github.com/swaggo/gin-swagger"
+	"github.com/swaggo/gin-swagger/swaggerFiles"
+
+	_ "github.com/Kolia913/todo-app/docs"
 )
 
 type Handler struct {
@@ -17,6 +22,8 @@ func NewHandler(services *service.Service) *Handler {
 
 func (h *Handler) InitRoutes() *gin.Engine {
 	router := gin.New()
+
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	auth := router.Group("/auth")
 	{
@@ -33,15 +40,19 @@ func (h *Handler) InitRoutes() *gin.Engine {
 			lists.GET("/:id", h.getListById)
 			lists.PUT("/:id", h.updateList)
 			lists.DELETE("/:id", h.deleteList)
+
+			items := lists.Group("/:id/items")
+			{
+				items.POST("", h.createItem)
+				items.GET("", h.getAllItems)
+			}
 		}
 
-		items := api.Group("/:id/items")
+		items := api.Group("items")
 		{
-			items.POST("", h.createItem)
-			items.GET("", h.getAllItems)
-			items.GET("/:item_id", h.getItemById)
-			items.PUT("/:item_id", h.updateItem)
-			items.DELETE("/:item_id", h.deleteItem)
+			items.GET("/:id", h.getItemById)
+			items.PUT("/:id", h.updateItem)
+			items.DELETE("/:id", h.deleteItem)
 		}
 	}
 	return router

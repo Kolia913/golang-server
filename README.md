@@ -12,3 +12,6 @@
 ### Build executable file:
     1. cd "PROJECT_DIRECTORY"
     2. go build
+
+### Swagger documentation:
+    http://<host>:<port>/swagger/index.html#/
